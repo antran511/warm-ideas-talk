@@ -1,22 +1,19 @@
 import { useBreadcrumb } from "@refinedev/core";
 import { Link } from "react-router-dom";
+import { Breadcrumbs, Anchor } from "@mantine/core";
 
 export const Breadcrumb = () => {
   const { breadcrumbs } = useBreadcrumb();
 
   return (
-    <ul className="breadcrumb">
-      {breadcrumbs.map((breadcrumb) => {
+    <Breadcrumbs className="breadcrumb">
+      {breadcrumbs.map((breadcrumb, index) => {
         return (
-          <li key={`breadcrumb-${breadcrumb.label}`}>
-            {breadcrumb.href ? (
-              <Link to={breadcrumb.href}>{breadcrumb.label}</Link>
-            ) : (
-              <span>{breadcrumb.label}</span>
-            )}
-          </li>
+          <Anchor href={breadcrumb.href} key={index} size={10}>
+            {breadcrumb.label}
+          </Anchor>
         );
       })}
-    </ul>
+    </Breadcrumbs>
   );
 };

@@ -1,5 +1,6 @@
 import { useLogout, useMenu } from "@refinedev/core";
 import { NavLink } from "react-router-dom";
+import { Box, NavLink as MantineLink } from "@mantine/core";
 
 export const Menu = () => {
   const { mutate: logout } = useLogout();
@@ -7,14 +8,13 @@ export const Menu = () => {
 
   return (
     <nav className="menu">
-      <ul>
+      {/* <Box>
         {menuItems.map((item) => (
-          <li key={item.key}>
-            <NavLink to={item.route}>{item.label}</NavLink>
-          </li>
+          <NavLink to={item.route} key={item.key}>
+            <MantineLink label={item.label} />
+          </NavLink>
         ))}
-      </ul>
-      <button onClick={() => logout()}>Logout</button>
+      </Box> */}
     </nav>
   );
 };
