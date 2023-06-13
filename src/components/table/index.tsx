@@ -2,16 +2,18 @@ import { Box, Flex } from "@mantine/core";
 import {
   MRT_GlobalFilterTextInput,
   MRT_ShowHideColumnsButton,
+  MRT_TableInstance,
   MRT_ToggleFiltersButton,
   MantineReactTable,
   MantineReactTableProps,
 } from "mantine-react-table";
-import { IconNewSection } from "@tabler/icons-react";
-export const Table = ({ columns, data, ...rest }: MantineReactTableProps) => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const Table = <TData extends Record<string, any> = {}>(
+  props: MantineReactTableProps<TData>
+) => {
   return (
     <MantineReactTable
-      columns={columns}
-      data={data}
+      {...props}
       enableDensityToggle={false}
       enableFullScreenToggle={false}
       mantineTopToolbarProps={{
@@ -21,34 +23,42 @@ export const Table = ({ columns, data, ...rest }: MantineReactTableProps) => {
           div: {
             padding: "0px",
           },
-          position: "absolute",
         },
       }}
       initialState={{
         showGlobalFilter: true,
-        ...rest.initialState,
-      }}
-      {...rest}
-      mantineBottomToolbarProps={{
-        sx: {
-          position: "fixed",
-          bottom: "0px",
-        },
+        ...props.initialState,
       }}
       mantineTableBodyCellProps={{
         sx: {
-          padding: "0.5rem 0rem !important",
+          padding: "0.5rem 1rem !important",
           border: "none",
         },
       }}
       mantinePaperProps={{
         withBorder: false,
         shadow: "none",
+        width: "100%",
+        sx: {
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+        },
+      }}
+      mantineBottomToolbarProps={{
+        sx: {
+          padding: "0 1rem !important",
+          minHeight: "2.5rem",
+        },
+      }}
+      mantinePaginationProps={{
+        showRowsPerPage: false,
       }}
       mantineTableContainerProps={{
         sx: {
+          height: "100%",
+          maxHeight: "calc(100vh - 242px)",
           flex: "1 1 auto",
-          overflow: "auto",
         },
       }}
       mantineTableHeadCellProps={{
@@ -56,7 +66,6 @@ export const Table = ({ columns, data, ...rest }: MantineReactTableProps) => {
           "& .mantine-TableHeadCell-Content": {
             justifyContent: "space-between",
           },
-          padding: "0.75rem 0 !important",
         },
       }}
       mantineTableProps={{
@@ -74,10 +83,19 @@ export const Table = ({ columns, data, ...rest }: MantineReactTableProps) => {
         placeholder: "Tìm kiếm",
       }}
       renderTopToolbar={({ table }) => (
-        <Flex justify="space-between">
+        <Flex
+          justify="space-between"
+          sx={{
+            paddingRight: "1rem",
+            paddingLeft: "1rem",
+            paddingBottom: "1rem",
+          }}
+        >
           <Box></Box>
           <Flex>
-            <MRT_ToggleFiltersButton table={table} />
+            {table.options.enableColumnFilters && (
+              <MRT_ToggleFiltersButton table={table} />
+            )}
             <MRT_ShowHideColumnsButton table={table} />
             <MRT_GlobalFilterTextInput table={table} />
           </Flex>

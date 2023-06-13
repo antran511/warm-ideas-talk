@@ -6,7 +6,11 @@ export const Breadcrumb = () => {
   const { breadcrumbs } = useBreadcrumb();
 
   return (
-    <Breadcrumbs className="breadcrumb">
+    <Breadcrumbs
+      sx={{
+        padding: "0 1rem",
+      }}
+    >
       {breadcrumbs.map((breadcrumb, index) => {
         return (
           <Anchor href={breadcrumb.href} key={index} size={10}>

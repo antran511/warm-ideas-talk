@@ -30,7 +30,7 @@ interface IItem {
 export const ItemList = () => {
   const [pagination, setPagination] = useState({
     pageIndex: 0,
-    pageSize: 20,
+    pageSize: 30,
   });
   const { data, isLoading } = useList<IItem, HttpError>({
     resource: "items",

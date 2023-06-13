@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren } from "react";
 import {
   AppShell,
   Navbar,
@@ -10,7 +10,6 @@ import {
 import { Breadcrumb } from "../breadcrumb";
 import { useState } from "react";
 import { Menu } from "../menu";
-
 export const Layout: React.FC<PropsWithChildren<Record<never, unknown>>> = ({
   children,
 }) => {
@@ -19,6 +18,7 @@ export const Layout: React.FC<PropsWithChildren<Record<never, unknown>>> = ({
   return (
     <div className="layout">
       <AppShell
+        padding="0px"
         styles={{
           root: {
             header: {
@@ -45,25 +45,26 @@ export const Layout: React.FC<PropsWithChildren<Record<never, unknown>>> = ({
           </Navbar>
         }
         header={
-          <Header height={{ base: 50, md: 50 }} p="md">
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                height: "100%",
-              }}
-            >
-              <MediaQuery largerThan="sm" styles={{ display: "none" }}>
-                <Burger
-                  opened={opened}
-                  onClick={() => setOpened((o) => !o)}
-                  size="sm"
-                  color={theme.colors.gray[6]}
-                  mr="xl"
-                />
-              </MediaQuery>
-            </div>
-          </Header>
+          <></>
+          // <Header height={{ base: 50, md: 50 }} p="md">
+          //   <div
+          //     style={{
+          //       display: "flex",
+          //       alignItems: "center",
+          //       height: "100%",
+          //     }}
+          //   >
+          //     <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+          //       <Burger
+          //         opened={opened}
+          //         onClick={() => setOpened((o) => !o)}
+          //         size="sm"
+          //         color={theme.colors.gray[6]}
+          //         mr="xl"
+          //       />
+          //     </MediaQuery>
+          //   </div>
+          // </Header>
         }
       >
         {/* <Breadcrumb /> */}

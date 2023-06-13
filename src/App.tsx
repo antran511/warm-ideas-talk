@@ -1,29 +1,26 @@
-import {
-  Authenticated,
-  ErrorComponent,
-  GitHubBanner,
-  Refine,
-} from "@refinedev/core";
+import { Authenticated, ErrorComponent, Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import routerBindings, {
   CatchAllNavigate,
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
-import { dataProvider } from "src/rest-data-provider";
+import { dataProvider } from "src/providers";
+import { notificationProvider } from "@refinedev/mantine";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { authProvider } from "./authProvider";
 import { Layout } from "./components/layout";
-
+import { Notifications } from "@mantine/notifications";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import { MantineProvider } from "@mantine/core";
-import { BlogPostList } from "src/pages/blog-posts";
 import { ItemList } from "src/pages/items";
-import { Notifications } from "@mantine/notifications";
 import { ModalsProvider } from "@mantine/modals";
+import { SaleOrderList, SaleOrderCreate } from "src/pages/sale-orders";
+import { DatesProvider } from "@mantine/dates";
+import { ProductionOrderList } from "src/pages/production-orders";
 
 function App() {
   return (
@@ -36,21 +33,17 @@ function App() {
             primaryShade: 7,
           }}
         >
-          <ModalsProvider>
+          <Notifications position="top-right" zIndex={2077} />
+          <DatesProvider settings={{ locale: "vi" }}>
             <Refine
+              notificationProvider={notificationProvider}
               dataProvider={dataProvider("http://127.0.0.1:3333/api")}
               routerProvider={routerBindings}
               authProvider={authProvider}
               resources={[
                 {
-                  name: "blog_posts",
-                  list: "/blog-posts",
-                  create: "/blog-posts/create",
-                  edit: "/blog-posts/edit/:id",
-                  show: "/blog-posts/show/:id",
-                  meta: {
-                    canDelete: true,
-                  },
+                  name: "production-orders",
+                  list: "/production-orders",
                 },
                 {
                   name: "items",
@@ -59,60 +52,70 @@ function App() {
                     label: "Hàng hoá",
                   },
                 },
+                {
+                  name: "sale-orders",
+                  list: "/sale-orders",
+                  create: "/sale-orders/create",
+                  meta: {
+                    label: "Đơn bán hàng",
+                  },
+                },
               ]}
               options={{
-                syncWithLocation: true,
+                // syncWithLocation: true,
                 warnWhenUnsavedChanges: true,
               }}
             >
-              <Routes>
-                <Route
-                  element={
-                    <Authenticated fallback={<CatchAllNavigate to="/login" />}>
-                      <Layout>
-                        <Outlet />
-                      </Layout>
-                    </Authenticated>
-                  }
-                >
+              <ModalsProvider>
+                <Routes>
                   <Route
-                    index
-                    element={<NavigateToResource resource="blog_posts" />}
-                  />
-                  <Route path="/items">
-                    <Route index element={<ItemList />} />
+                    element={
+                      <Authenticated
+                        fallback={<CatchAllNavigate to="/login" />}
+                      >
+                        <Layout>
+                          <Outlet />
+                        </Layout>
+                      </Authenticated>
+                    }
+                  >
+                    <Route
+                      index
+                      element={<NavigateToResource resource="blog_posts" />}
+                    />
+                    <Route path="/items">
+                      <Route index element={<ItemList />} />
+                    </Route>
+                    <Route path="/sale-orders">
+                      <Route index element={<SaleOrderList />} />
+                      <Route path="create" element={<SaleOrderCreate />} />
+                    </Route>
+                    <Route path="/production-orders">
+                      <Route index element={<ProductionOrderList />} />
+                    </Route>
+                    <Route path="*" element={<ErrorComponent />} />
                   </Route>
-                  <Route path="/blog-posts">
-                    <Route index element={<BlogPostList />} />
-                    {/* <Route path="create" element={<BlogPostCreate />} />
-                  <Route path="edit/:id" element={<BlogPostEdit />} />
-                  <Route path="show/:id" element={<BlogPostShow />} /> */}
+                  <Route
+                    element={
+                      <Authenticated fallback={<Outlet />}>
+                        <NavigateToResource />
+                      </Authenticated>
+                    }
+                  >
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPassword />}
+                    />
                   </Route>
-                  {/* <Route path="/categories">
-                  <Route index element={<CategoryList />} />
-                  <Route path="create" element={<CategoryCreate />} />
-                  <Route path="edit/:id" element={<CategoryEdit />} />
-                  <Route path="show/:id" element={<CategoryShow />} />
-                </Route> */}
-                  <Route path="*" element={<ErrorComponent />} />
-                </Route>
-                <Route
-                  element={
-                    <Authenticated fallback={<Outlet />}>
-                      <NavigateToResource />
-                    </Authenticated>
-                  }
-                >
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                </Route>
-              </Routes>
+                </Routes>
 
-              <RefineKbar />
-              <UnsavedChangesNotifier />
+                <RefineKbar />
+                <UnsavedChangesNotifier />
+              </ModalsProvider>
             </Refine>
-          </ModalsProvider>
+          </DatesProvider>
         </MantineProvider>
       </RefineKbarProvider>
     </BrowserRouter>

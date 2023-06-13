@@ -60,9 +60,7 @@ export const dataProvider = (
       { headers }
     );
 
-    return {
-      data,
-    };
+    return data;
   },
 
   create: async ({ resource, variables, meta }) => {
@@ -75,9 +73,7 @@ export const dataProvider = (
       headers,
     });
 
-    return {
-      data,
-    };
+    return data;
   },
 
   update: async ({ resource, id, variables, meta }) => {
@@ -90,9 +86,7 @@ export const dataProvider = (
       headers,
     });
 
-    return {
-      data,
-    };
+    return data;
   },
 
   getOne: async ({ resource, id, meta }) => {
@@ -103,9 +97,7 @@ export const dataProvider = (
 
     const { data } = await httpClient[requestMethod](url, { headers });
 
-    return {
-      data,
-    };
+    return data;
   },
 
   deleteOne: async ({ resource, id, variables, meta }) => {
@@ -119,9 +111,7 @@ export const dataProvider = (
       headers,
     });
 
-    return {
-      data,
-    };
+    return data;
   },
 
   getApiUrl: () => {
@@ -186,6 +176,6 @@ export const dataProvider = (
 
     const { data } = axiosResponse;
 
-    return Promise.resolve({ data });
+    return Promise.resolve({ ...data });
   },
 });
